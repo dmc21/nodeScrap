@@ -11,8 +11,41 @@ const Product = require("./Article");
 const express = require('express')
 const app = express();
 
+app.set('views', __dirname + '/views');
+app.engine('html', require('ejs').renderFile);
+var bodyParser = require('body-parser')
+
+// parse application/x-www-form-urlencoded
+var bodyParser = require('body-parser');
+const Article = require('./Article');
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
 
 var interval = setInterval(function () { }, 1000);
+
+
+
+
+app.get('/productos', function (req, res) {
+    res.render('form.html');
+});
+
+
+// POST method route
+app.post('/newProduct', function (req, res) {
+
+    var product = req.body.product;
+    var url = req.body.url;
+    var store = req.body.store;
+
+    var product = new Product({ product: product, url: url, store: store, stock: false });
+
+    product.save(function (err) {
+        if (err) return err;
+        // saved!
+    });
+});
 
 
 
@@ -48,7 +81,7 @@ function main() {
 
                         article.stock = true;
                         data.splice(index, 1);
-                        bot.sendMessage("<chatid>", `El producto ${article.product} está disponible en ${article.store}. \n URL: ${article.url}`);
+                        bot.sendMessage("<chatId>", `El producto ${article.product} está disponible en ${article.store}. \n URL: ${article.url}`);
                         Product.updateMany({ _id: articleEach._id }, { $set: { stock: true } }).then();
 
                         sleep(5000);

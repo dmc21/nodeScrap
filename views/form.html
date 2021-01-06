@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Product</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+</head>
+
+<body>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <h1 class="text-center">Inserción de productos</h1>
+                    <hr>
+                    <form class="m-2" id="insertForm">
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputEmail4">Nombre del Producto</label>
+                                <input type="text" id="nameProduct" class="form-control" placeholder="Tarjeta Gráfica">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Url</label>
+                                <input type="text" class="form-control" id="urlProduct"
+                                    placeholder="https://soyunaurl.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputAddress">Tienda</label>
+                            <select class="form-control" id="selectStore">
+                                <option>Pccomponentes</option>
+                                <option>Amazon</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-primary text-center"
+                            onclick="sendForm(); return false;">Crear Alerta</button>
+                        <button type="reset" class="btn btn-danger text-center float-right">Restablecer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        function sendForm() {
+
+            let nameProduct = document.getElementById("nameProduct").value;
+            let urlProduct = document.getElementById("urlProduct").value;
+            let store = document.getElementById("selectStore").selectedIndex;
+
+            if (store == 0)
+                store = "Pccomponentes";
+            else
+                store = "Amazon";
+
+
+            var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
+            xmlhttp.open("POST", "http://localhost:3000/newProduct");
+            xmlhttp.setRequestHeader("Content-Type", "application/json");
+            xmlhttp.send(JSON.stringify({ product: nameProduct, url: urlProduct, store: store }));
+        }
+
+    </script>
+
+</body>
+
+</html>
