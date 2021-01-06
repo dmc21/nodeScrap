@@ -18,6 +18,7 @@ var interval = setInterval(function () { }, 1000);
 
 app.listen(port, () => {
     console.log("Node JS Server...")
+    main();
     interval = setInterval(main, 900000)
 });
 
@@ -47,7 +48,7 @@ function main() {
 
                         article.stock = true;
                         data.splice(index, 1);
-                        bot.sendMessage("<telegramchatId>", `El producto ${article.product} está disponible en ${article.store}. \n URL: ${article.url}`);
+                        bot.sendMessage("<chatid>", `El producto ${article.product} está disponible en ${article.store}. \n URL: ${article.url}`);
                         Product.updateMany({ _id: articleEach._id }, { $set: { stock: true } }).then();
 
                         sleep(5000);
