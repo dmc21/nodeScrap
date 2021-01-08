@@ -15,6 +15,10 @@ app.set('views', __dirname + '/views');
 app.engine('html', require('ejs').renderFile);
 var bodyParser = require('body-parser')
 
+const cors = require("cors");
+
+app.use(cors());
+
 // parse application/x-www-form-urlencoded
 var bodyParser = require('body-parser');
 const Article = require('./Article');
@@ -25,11 +29,16 @@ app.use(express.json());
 var interval = setInterval(function () { }, 1000);
 
 
-
-
-app.get('/productos', function (req, res) {
-    res.render('form.html');
+app.get('/', (req, res) => {
+    res.render('allproducts.html');
 });
+
+app.get('/getAll', (req, res) => {
+
+    Product.find({}).then(data => {
+        res.send(data);
+    })
+})
 
 
 // POST method route
@@ -47,12 +56,20 @@ app.post('/newProduct', function (req, res) {
     });
 });
 
+app.post("/deleteProduct", (req,res) => {
+    var id = req.body._id;
+
+    Product.deleteOne({_id: id}).then(data => {
+        res.send(data);
+    })
+})
+
 
 
 app.listen(port, () => {
     console.log("Node JS Server...")
     main();
-    interval = setInterval(main, 900000)
+    interval = setInterval(main, 5000)
 });
 
 function allProductsAvailables() {
