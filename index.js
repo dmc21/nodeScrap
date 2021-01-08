@@ -1,5 +1,8 @@
 'use strict';
 
+const dotenv = require('dotenv');
+dotenv.config();
+
 const port = 3000
 const request = require('request');
 var bot = require("./telegram");
@@ -11,12 +14,13 @@ const Product = require("./Article");
 const express = require('express')
 const app = express();
 
-app.set('views', __dirname + '/views');
+app.set('views', __dirname + '/');
+app.use('/js', express.static('js'))
+
 app.engine('html', require('ejs').renderFile);
 var bodyParser = require('body-parser')
 
 const cors = require("cors");
-
 app.use(cors());
 
 // parse application/x-www-form-urlencoded
@@ -30,7 +34,7 @@ var interval = setInterval(function () { }, 1000);
 
 
 app.get('/', (req, res) => {
-    res.render('allproducts.html');
+    res.render('views/allproducts.html');
 });
 
 app.get('/getAll', (req, res) => {
@@ -98,7 +102,7 @@ function main() {
 
                         article.stock = true;
                         data.splice(index, 1);
-                        bot.sendMessage("<chatId>", `El producto ${article.product} está disponible en ${article.store}. \n URL: ${article.url}`);
+                        bot.sendMessage(process.env.CHAT_ID, `El producto ${article.product} está disponible en ${article.store}. \n URL: ${article.url}`);
                         Product.updateMany({ _id: articleEach._id }, { $set: { stock: true } }).then();
 
                         sleep(5000);

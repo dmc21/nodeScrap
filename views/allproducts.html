@@ -25,6 +25,8 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
+        <script src="js/Enviroment.js"></script>
+
 
 </head>
 
@@ -107,7 +109,10 @@
             var retData = [];
 
             let p = new Promise((resolve, reject) => {
-                $.get("http://localhost:3000/getAll", function (data) {
+                
+                let url = IP+"getAll";
+
+                $.get(url, function (data, status) {
                     resolve(data)
                 });
             });
@@ -133,7 +138,7 @@
 
 
             var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
-            xmlhttp.open("POST", "http://localhost:3000/newProduct");
+            xmlhttp.open("POST", IP+"newProduct");
             xmlhttp.setRequestHeader("Content-Type", "application/json");
             xmlhttp.send(JSON.stringify({ product: nameProduct, url: urlProduct, store: store }));
 
@@ -143,7 +148,7 @@
         }
 
         const deleteProduct = (idProduct) => {
-            $.post("http://localhost:3000/deleteProduct", { _id: idProduct }, (data => {
+            $.post(IP+"deleteProduct", { _id: idProduct }, (data => {
                 callNodeAllProducts().then(data => {
                     buildTable(data);
                 })
