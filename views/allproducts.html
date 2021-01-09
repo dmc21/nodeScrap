@@ -71,7 +71,6 @@
                             <th>Product</th>
                             <th>Store</th>
                             <th>Stock</th>
-                            <th>Url</th>
                             <th>Operation</th>
                         </tr>
                     </thead>
@@ -94,10 +93,9 @@
 
             data.forEach(element => {
                 table.append("<tr>")
-                    .append(`<td>${element.product}</td>`)
+                    .append(`<td><a href="${element.url}">${element.product}</a></td>`)
                     .append(`<td>${element.store}</td>`)
                     .append(`<td>${element.stock}</td>`)
-                    .append(`<td><a href="${element.url}">${element.url}</a></td>`)
                     .append(`<td><button class="btn btn-danger" onclick="deleteProduct('${element._id}')"/><i class="fa fa-trash"/></button></td>`)
 
                 table.append(`</tr>`);
