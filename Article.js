@@ -5,7 +5,15 @@ var productSchema = new Schema({
    store:String,
    product:String,
    url:String,
-   stock:Boolean
+
+   markSale: Boolean,
+   stock:Boolean,
+
+   price: String,
+   actualPrice: String,
+   
+   priceAlert: Boolean,
+   stockAlert: Boolean
 });
 
 module.exports = mongoose.model('productColls', productSchema);  

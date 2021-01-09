@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
         integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
 
-        <script src="js/Enviroment.js"></script>
+    <script src="js/Enviroment.js"></script>
 
 
 </head>
@@ -34,7 +34,7 @@
 
     <div class="container-fluid">
         <div class="row mt-4">
-            <div class="col-md-3 col-sm-12">
+            <div class="col-md-4 col-sm-12">
                 <div class="card">
                     <h1 class="text-center">Inserción de productos</h1>
                     <hr>
@@ -47,16 +47,51 @@
                             <div class="form-group col-md-12">
                                 <label for="inputPassword4">Url</label>
                                 <input type="text" class="form-control" id="urlProduct"
-                                    placeholder="https://soyunaurl.com">
+                                    placeholder="https://soyunaurl.com" onblur="getInfoOfProduct()">
+                            </div>
+
+                            <div class="card col-md-12">
+                                <div class="col-md-12">
+                                    <p>Alertas</p>
+                                    
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="stockAlert">
+                                            <label class="form-check-label" for="exampleCheck1">Stock</label>
+                                        </div>
+                                    </div>
+        
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input type="checkbox" class="form-check-input" id="priceAlert" onclick="togglePrecios()">
+                                            <label class="form-check-label" for="exampleCheck1" >Precios</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+
+                            <div class="form-group col-md-6 mt-2 d-none prices">
+                                <label for="inputPassword4">Precio Asequible</label>
+                                <input type="number" class="form-control" id="priceProduct"
+                                    placeholder="Precio Asequible">
+                            </div>
+                            <div class="form-group col-md-6 mt-2 d-none prices">
+                                <label for="inputPassword4">Precio Actual</label>
+                                <input disabled type="number" class="form-control" id="actualPriceProduct"
+                                    placeholder="Precio Actual">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mt-1">
                             <label for="inputAddress">Tienda</label>
                             <select class="form-control" id="selectStore">
                                 <option>Pccomponentes</option>
                                 <option>Amazon</option>
                             </select>
                         </div>
+
                         <button type="button" class="btn btn-primary text-center"
                             onclick="sendForm(); return false;">Save / Update</button>
                         <button type="reset" class="btn btn-danger text-center float-right">Restablecer</button>
@@ -64,14 +99,16 @@
                 </div>
             </div>
 
-            <div class="col-md-9 col-md-offset-1 col-sm-12">
+            <div class="col-md-8 col-md-offset-1 col-sm-12">
                 <table id="dataTable" class="table table-responsive-md table-responsive-sm">
                     <thead>
                         <tr>
-                            <th>Product</th>
-                            <th>Store</th>
+                            <th>Producto</th>
+                            <th>Tienda</th>
+                            <th>Mi Precio</th>
+                            <th>Precio Actual</th>
                             <th>Stock</th>
-                            <th>Operation</th>
+                            <th>Operación</th>
                         </tr>
                     </thead>
                     <tbody id="contentTable">
@@ -95,6 +132,8 @@
                 table.append("<tr>")
                     .append(`<td><a href="${element.url}">${element.product}</a></td>`)
                     .append(`<td>${element.store}</td>`)
+                    .append(`<td>${element.price}</td>`)
+                    .append(`<td>${element.actualPrice}</td>`)
                     .append(`<td>${element.stock}</td>`)
                     .append(`<td><button class="btn btn-danger" onclick="deleteProduct('${element._id}')"/><i class="fa fa-trash"/></button></td>`)
 
@@ -107,8 +146,8 @@
             var retData = [];
 
             let p = new Promise((resolve, reject) => {
-                
-                let url = IP+"getAll";
+
+                let url = IP + "getAll";
 
                 $.get(url, function (data, status) {
                     resolve(data)
@@ -128,6 +167,9 @@
             let nameProduct = document.getElementById("nameProduct").value;
             let urlProduct = document.getElementById("urlProduct").value;
             let store = document.getElementById("selectStore").selectedIndex;
+            let priceProduct = document.getElementById("priceProduct").value;
+            let stockAlert = document.getElementById("stockAlert").checked;
+            let priceAlert = document.getElementById("priceAlert").checked;
 
             if (store == 0)
                 store = "Pccomponentes";
@@ -136,9 +178,9 @@
 
 
             var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
-            xmlhttp.open("POST", IP+"newProduct");
+            xmlhttp.open("POST", IP + "newProduct");
             xmlhttp.setRequestHeader("Content-Type", "application/json");
-            xmlhttp.send(JSON.stringify({ product: nameProduct, url: urlProduct, store: store }));
+            xmlhttp.send(JSON.stringify({ product: nameProduct, url: urlProduct, store: store, price: priceProduct, stockAlert: stockAlert, priceAlert: priceAlert}));
 
             callNodeAllProducts().then(data => {
                 buildTable(data)
@@ -146,11 +188,29 @@
         }
 
         const deleteProduct = (idProduct) => {
-            $.post(IP+"deleteProduct", { _id: idProduct }, (data => {
+            $.post(IP + "deleteProduct", { _id: idProduct }, (data => {
                 callNodeAllProducts().then(data => {
                     buildTable(data);
                 })
             }));
+        }
+
+        const togglePrecios = () => {
+            $(".prices").toggleClass("d-none")
+        }
+
+        const getInfoOfProduct = () => {
+
+            let url = $("#urlProduct").val()
+            let server = IP + "productValues";
+
+            $.post(server, {url: url}, function (data, status) {
+
+            document.getElementById("nameProduct").value = data.name;
+            document.getElementById("actualPriceProduct").value = parseFloat(data.price);
+            document.getElementById("priceProduct").value = (parseFloat(data.price) - parseFloat(data.price)* 0.2).toFixed(2);
+                
+            });
         }
 
     </script>
