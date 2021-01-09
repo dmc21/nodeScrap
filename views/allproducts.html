@@ -47,7 +47,7 @@
                             <div class="form-group col-md-12">
                                 <label for="inputPassword4">Url</label>
                                 <input type="text" class="form-control" id="urlProduct"
-                                    placeholder="https://soyunaurl.com" onblur="getInfoOfProduct()">
+                                    placeholder="https://soyunaurl.com">
                             </div>
 
                             <div class="col-md-12">
@@ -216,6 +216,11 @@
         const togglePrecios = () => {
             $(".prices").toggleClass("d-none")
         }
+
+
+        $("#urlProduct").blur(function(e){
+            getInfoOfProduct();
+        });
 
         const getInfoOfProduct = () => {
 
