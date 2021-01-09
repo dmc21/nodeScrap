@@ -34,9 +34,9 @@
 
     <div class="container-fluid">
         <div class="row mt-4">
-            <div class="col-md-4 col-sm-12">
+            <div class="col-md-8 mb-3 offset-2 col-sm-12">
                 <div class="card">
-                    <h1 class="text-center">Inserción de productos</h1>
+                    <h1 class="text-center">Alertas</h1>
                     <hr>
                     <form class="m-2" id="insertForm">
                         <div class="form-row">
@@ -50,12 +50,11 @@
                                     placeholder="https://soyunaurl.com" onblur="getInfoOfProduct()">
                             </div>
 
-                            <div class="card col-md-12">
-                                <div class="col-md-12">
-                                    <p>Alertas</p>
-                                    
-                                </div>
-                                <div class="form-row">
+                            <div class="col-md-12">
+                                
+                                    <label for="">Alertas</label>
+                                
+                                <div class="form-row mb-1">
                                     <div class="col-md-6">
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="stockAlert">
@@ -99,13 +98,13 @@
                 </div>
             </div>
 
-            <div class="col-md-8 col-md-offset-1 col-sm-12">
+            <div class="col-md-12 col-md-offset-1 col-sm-12">
                 <table id="dataTable" class="table table-responsive-md table-responsive-sm">
                     <thead>
                         <tr>
                             <th>Producto</th>
                             <th>Tienda</th>
-                            <th>Mi Precio</th>
+                            <th>Precio Deseado</th>
                             <th>Precio Actual</th>
                             <th>Stock</th>
                             <th>Operación</th>
@@ -129,12 +128,23 @@
             table.empty();
 
             data.forEach(element => {
+
+                let price = "--"
+
+                if (element.markSale)
+                    price = element.price;
+
+                let stockText = '<i class="fas fa-sad-cry"></i>';
+                if (element.stock){
+                    stockText = '<i class="fas fa-laugh-squint"></i>'
+                }
+
                 table.append("<tr>")
                     .append(`<td><a href="${element.url}">${element.product}</a></td>`)
                     .append(`<td>${element.store}</td>`)
-                    .append(`<td>${element.price}</td>`)
+                    .append(`<td>${price}</td>`)
                     .append(`<td>${element.actualPrice}</td>`)
-                    .append(`<td>${element.stock}</td>`)
+                    .append(`<td>${stockText}</td>`)
                     .append(`<td><button class="btn btn-danger" onclick="deleteProduct('${element._id}')"/><i class="fa fa-trash"/></button></td>`)
 
                 table.append(`</tr>`);
@@ -170,6 +180,8 @@
             let priceProduct = document.getElementById("priceProduct").value;
             let stockAlert = document.getElementById("stockAlert").checked;
             let priceAlert = document.getElementById("priceAlert").checked;
+
+            if(!priceAlert) priceProduct = 0.0
 
             if (store == 0)
                 store = "Pccomponentes";
