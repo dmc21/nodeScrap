@@ -51,9 +51,9 @@
                             </div>
 
                             <div class="col-md-12">
-                                
-                                    <label for="">Alertas</label>
-                                
+
+                                <label for="">Alertas</label>
+
                                 <div class="form-row mb-1">
                                     <div class="col-md-6">
                                         <div class="form-check">
@@ -61,16 +61,17 @@
                                             <label class="form-check-label" for="exampleCheck1">Stock</label>
                                         </div>
                                     </div>
-        
+
                                     <div class="col-md-6">
                                         <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="priceAlert" onclick="togglePrecios()">
-                                            <label class="form-check-label" for="exampleCheck1" >Precios</label>
+                                            <input type="checkbox" class="form-check-input" id="priceAlert"
+                                                onclick="togglePrecios()">
+                                            <label class="form-check-label" for="exampleCheck1">Precios</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
 
                             <div class="form-group col-md-6 mt-2 d-none prices">
                                 <label for="inputPassword4">Precio Asequible</label>
@@ -131,13 +132,18 @@
 
                 let price = "--"
 
-                if (element.markSale)
+                if (element.priceAlert == true)
                     price = element.price;
 
-                let stockText = '<i class="fas fa-sad-cry"></i>';
-                if (element.stock){
+                let stockText = "--"
+
+                if (element.stockAlert == true) { 
+                    if (element.stock) {
                     stockText = '<i class="fas fa-laugh-squint"></i>'
+                } else {
+                    stockText = '<i class="fas fa-sad-cry"></i>';
                 }
+            }
 
                 table.append("<tr>")
                     .append(`<td><a href="${element.url}">${element.product}</a></td>`)
@@ -148,7 +154,7 @@
                     .append(`<td><button class="btn btn-danger" onclick="deleteProduct('${element._id}')"/><i class="fa fa-trash"/></button></td>`)
 
                 table.append(`</tr>`);
-            });
+        });
 
         }
 
@@ -181,7 +187,7 @@
             let stockAlert = document.getElementById("stockAlert").checked;
             let priceAlert = document.getElementById("priceAlert").checked;
 
-            if(!priceAlert) priceProduct = 0.0
+            if (!priceAlert) priceProduct = 0.0
 
             if (store == 0)
                 store = "Pccomponentes";
@@ -192,7 +198,7 @@
             var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance 
             xmlhttp.open("POST", IP + "newProduct");
             xmlhttp.setRequestHeader("Content-Type", "application/json");
-            xmlhttp.send(JSON.stringify({ product: nameProduct, url: urlProduct, store: store, price: priceProduct, stockAlert: stockAlert, priceAlert: priceAlert}));
+            xmlhttp.send(JSON.stringify({ product: nameProduct, url: urlProduct, store: store, price: priceProduct, stockAlert: stockAlert, priceAlert: priceAlert }));
 
             callNodeAllProducts().then(data => {
                 buildTable(data)
@@ -216,12 +222,12 @@
             let url = $("#urlProduct").val()
             let server = IP + "productValues";
 
-            $.post(server, {url: url}, function (data, status) {
+            $.post(server, { url: url }, function (data, status) {
 
-            document.getElementById("nameProduct").value = data.name;
-            document.getElementById("actualPriceProduct").value = parseFloat(data.price);
-            document.getElementById("priceProduct").value = (parseFloat(data.price) - parseFloat(data.price)* 0.2).toFixed(2);
-                
+                document.getElementById("nameProduct").value = data.name;
+                document.getElementById("actualPriceProduct").value = parseFloat(data.price);
+                document.getElementById("priceProduct").value = (parseFloat(data.price) - parseFloat(data.price) * 0.2).toFixed(2);
+
             });
         }
 
