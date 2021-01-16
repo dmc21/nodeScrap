@@ -120,7 +120,7 @@ app.post("/productValues", (req, res) => {
 app.listen(port, () => {
     console.log("Node JS Server...")
     main();
-    interval = setInterval(main, 5000)
+    interval = setInterval(main, 300000)
 });
 
 function allProductsAvailables() {
