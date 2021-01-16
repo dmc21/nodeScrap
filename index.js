@@ -151,7 +151,7 @@ function main() {
 
                         if (article.priceAlert && article.stockAlert)
                             msg = `El producto ${article.product} está disponible en ${article.store} por el precio que DESEABAS!!!\n --> ${article.actualPrice}€.\n ${article.url}`
-                        else if (article.priceAlert) {
+                        else if (article.markSale) {
                             msg = `El producto ${article.product} ha bajado al precio que DESEABAS!!!\n --> ${article.actualPrice}€.\n ${article.url}`
                         } else if (article.stock)
                             msg = `El producto ${article.product} está disponible en ${article.store}\n --> ${article.actualPrice}€.\n ${article.url}`
