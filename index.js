@@ -147,7 +147,7 @@ function main() {
 
                     isAvailable(articleEach).then(article => {
 
-                        let msg = ""
+                        let msg = "Producto ->"+article.product;
 
                         if (article.priceAlert && article.stockAlert)
                             msg = `El producto ${article.product} está disponible en ${article.store} por el precio que DESEABAS!!!\n --> ${article.actualPrice}€.\n ${article.url}`
