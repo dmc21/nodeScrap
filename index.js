@@ -157,6 +157,7 @@ function main() {
                             msg = `El producto ${article.product} está disponible en ${article.store}\n --> ${article.actualPrice}€.\n ${article.url}`
 
 
+                            console.log("Available product ->"+article.product);
 
                         data.splice(index, 1);
                         bot.sendMessage(process.env.CHAT_ID, msg);
@@ -165,6 +166,9 @@ function main() {
 
 
                     }).catch(articleNotAvailable => {
+
+                        console.log("Non Available product ->"+articleNotAvailable.product);
+
                         articleNotAvailable.save().then()
                     });
 
