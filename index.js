@@ -233,17 +233,13 @@ function checkProduct(article, body, text, resolve, reject) {
             if (articleInStock) {
                 article.stock = true
                 resolve(article);
-                return;
             }
         } else if (article.priceAlert) {
             if (parseFloat(article.actualPrice) <= parseFloat(article.price)) {
                 article.markSale = true
                 resolve(article);
-                return;
             }
         }
-
-        resolve(article)
 
     }
 }
