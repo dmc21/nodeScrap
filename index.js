@@ -207,7 +207,7 @@ function sleep(time) {
 function checkProduct(article, body, text, resolve, reject) {
     const $ = cheerio.load(body)
 
-    if(article.store == "Pccomponentes")
+    if (article.store == "Pccomponentes")
         article.actualPrice = $("div#precio-main").attr("data-price")
     else
         article.actualPrice = $("#price_inside_buybox").text()
@@ -228,18 +228,14 @@ function checkProduct(article, body, text, resolve, reject) {
         if (article.stockAlert) {
             if (articleInStock) {
                 article.stock = true
-                revolve(article)
-            } else {
-                reject(article)
             }
-
         } else if (article.priceAlert) {
             if (parseFloat(article.actualPrice) <= parseFloat(article.price)) {
                 article.markSale = true
-                resolve(article)
-            } else {
-                reject(article)
             }
         }
+
+        resolve(article)
+
     }
 }
